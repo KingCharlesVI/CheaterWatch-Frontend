@@ -1,0 +1,41 @@
+/* Navbar.css */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif; /* Use Poppins font */
+    background-color: #000000;
+}
+  
+.brand {
+    font-size: 1.5rem;
+}
+
+.brand a {
+    text-decoration: none; /* Remove underlining */
+}
+  
+.nav-links {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+  
+.nav-links li {
+    display: inline;
+    margin-left: 20px;
+}
+  
+.nav-links li:first-child {
+    margin-left: 0;
+}
+  
+.nav-links a {
+    color: #00ff8c;
+    text-decoration: none;
+}
+  
+.nav-links a:hover {
+    opacity: 0.6; /* Reduce opacity on hover */
+}

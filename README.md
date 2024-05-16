@@ -67,7 +67,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]]
+[product-screenshot]
 
 CheaterWatch is a web app developed to help to keep cheaters in videogames at bay. By publically displaying suspected cheater profiles along with evidence and a grading system for how intense their cheating is, CheaterWatch raises awareness of serial cheaters with the aim of getting more reports submitted about them and therefore a higher chance of them getting banned. We know that fighting cheaters is a losing battle (for now...) but we're doing our part to help.
 
@@ -161,3 +161,4 @@ Thank you to all of the following, without whom the
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [React-url]: https://reactjs.org/
+[product-screenshot]: images/screenshot.png

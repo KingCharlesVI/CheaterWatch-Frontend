@@ -1,57 +1,60 @@
+// src/components/CheatReportForm.js
 import React, { useState } from 'react';
-import { Grommet, Box, Form, FormField, TextInput, Select, CheckBoxGroup, Button } from 'grommet';
+import { Container, FormControl, InputLabel, OutlinedInput, Button, Typography, Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import CallOfDutyMWLogo from '../assets/mw3.png';
+import WarzoneLogo from '../assets/wz.png';
+import ValorantLogo from '../assets/valorant.png';
+import ApexLegendsLogo from '../assets/apex.png';
 
-const customTheme = {
-  global: {
-    colors: {
-      brand: '#00ff8c', // Submit button color
-    },
-    input: {
-      fontColor: 'white', // Text color for input fields
-    },
-  },
-  textInput: {
-    extend: () => `
-      border: 2px solid white; // White border for input fields
-      &:focus {
-        border-color: #00ff8c !important; // Outline color for input fields when focused
-      }
-    `,
-  },
-  select: {
-    control: {
-      extend: () => `
-        background: black; // Black background for select dropdown
-        color: white; // White text color for select dropdown
-        border: 2px solid white; // White border for select dropdown
-        border-radius: 4px; // Border radius for select dropdown
-      `,
-    },
-    container: {
-      extend: () => `
-        border: 2px solid white; // White border for select dropdown
-      `,
+const StyledContainer = styled(Container)(({ theme }) => ({
+  backgroundColor: '#000', // Black background
+  color: '#fff', // White text
+  padding: theme.spacing(3),
+  borderRadius: theme.shape.borderRadius,
+}));
+
+const StyledFormControl = styled(FormControl)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+  '& .MuiInputLabel-root': {
+    color: '#fff', // White label color
+    '&.Mui-focused': {
+      color: '#00ff8c', // Green color when focused
     },
   },
-  checkBox: {
-    border: {
-      color: 'white', // White border color for all checkboxes
+  '& .MuiOutlinedInput-root': {
+    '& input': {
+      color: '#fff', // White text color
+    },
+    '& fieldset': {
+      borderColor: '#fff', // White border color
+    },
+    '&:hover fieldset': {
+      borderColor: '#fff', // White border color on hover
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#00ff8c', // Green border color when focused
     },
   },
-  checkBoxGroup: {
-    container: {
-      extend: () => `
-        border: 2px solid white; // White border for checkbox group
-        padding: 12px; // Adjust padding for better appearance
-      `,
-    },
-    checkbox: {
-      border: {
-        color: 'white', // White border color for individual checkboxes
-      },
-    },
+  '& .MuiSelect-select': {
+    color: '#fff', // White text color for select
+    backgroundColor: '#000', // Black background for select
   },
-};
+  '& .MuiOutlinedInput-notchedOutline': {
+    borderColor: '#fff', // White border color for select
+  },
+  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+    borderColor: '#00ff8c', // Green border color when focused
+  },
+}));
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  backgroundColor: '#00ff8c',
+  color: '#000',
+  '&:hover': {
+    backgroundColor: '#00cc75',
+  },
+}));
 
 const CheatReportForm = () => {
   const [game, setGame] = useState('');
@@ -60,7 +63,7 @@ const CheatReportForm = () => {
   const [videoLink, setVideoLink] = useState('');
 
   const handleGameChange = (e) => {
-    setGame(e.value);
+    setGame(e.target.value);
   };
 
   const handleUsernameChange = (e) => {
@@ -68,7 +71,7 @@ const CheatReportForm = () => {
   };
 
   const handleCheatsChange = (e) => {
-    setSuspectedCheats(e.value);
+    setSuspectedCheats(e.target.value);
   };
 
   const handleVideoLinkChange = (e) => {
@@ -89,34 +92,93 @@ const CheatReportForm = () => {
     setVideoLink('');
   };
 
+  const cheats = ['Wallhacks', 'Aimbot', 'Speedhacks', 'Unlock'];
+
+  const gameOptions = [
+    { value: 'Call of Duty Modern Warfare III', label: 'Call of Duty Modern Warfare III', logo: CallOfDutyMWLogo },
+    { value: 'Call of Duty Warzone', label: 'Call of Duty Warzone', logo: WarzoneLogo },
+    { value: 'Valorant', label: 'Valorant', logo: ValorantLogo },
+    { value: 'Apex Legends', label: 'Apex Legends', logo: ApexLegendsLogo },
+  ];
+
   return (
-    <Grommet theme={customTheme} themeMode="dark">
-      <Box align="center" pad="medium">
-        <Form onSubmit={handleSubmit}>
-          <FormField label="Game">
-            <Select
-              options={['Call of Duty Modern Warfare III', 'Call of Duty Warzone', 'Valorant', 'Apex Legends']}
-              value={game}
-              onChange={handleGameChange}
-            />
-          </FormField>
-          <FormField label="Username">
-            <TextInput value={username} onChange={handleUsernameChange} />
-          </FormField>
-          <FormField label="Suspected Cheats">
-            <CheckBoxGroup
-              options={['Wallhacks', 'Aimbot', 'Speedhacks', 'Unlock']}
-              value={suspectedCheats}
-              onChange={handleCheatsChange}
-            />
-          </FormField>
-          <FormField label="Link to video proof">
-            <TextInput value={videoLink} onChange={handleVideoLinkChange} />
-          </FormField>
-          <Button type="submit" label="Submit" primary />
-        </Form>
-      </Box>
-    </Grommet>
+    <StyledContainer maxWidth="sm">
+      <Typography variant="h4" gutterBottom>
+        Cheat Report Form
+      </Typography>
+      <form onSubmit={handleSubmit}>
+        <StyledFormControl fullWidth variant="outlined">
+          <InputLabel htmlFor="game">Game</InputLabel>
+          <Select
+            id="game"
+            value={game}
+            onChange={handleGameChange}
+            input={<OutlinedInput label="Game" />}
+            renderValue={(selected) => {
+              const selectedGame = gameOptions.find(option => option.value === selected);
+              return (
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <img src={selectedGame.logo} alt={selectedGame.label} style={{ width: 24, height: 24, marginRight: 8 }} />
+                  {selectedGame.label}
+                </div>
+              );
+            }}
+          >
+            {gameOptions.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                <img src={option.logo} alt={option.label} style={{ width: 24, height: 24, marginRight: 8 }} />
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </StyledFormControl>
+        <StyledFormControl fullWidth variant="outlined">
+          <InputLabel htmlFor="username">Username</InputLabel>
+          <OutlinedInput
+            id="username"
+            label="Username"
+            placeholder="Enter your username"
+            value={username}
+            onChange={handleUsernameChange}
+            required
+          />
+        </StyledFormControl>
+        <StyledFormControl fullWidth variant="outlined">
+          <InputLabel htmlFor="suspected-cheats">Suspected Cheats</InputLabel>
+          <Select
+            id="suspected-cheats"
+            multiple
+            value={suspectedCheats}
+            onChange={handleCheatsChange}
+            input={<OutlinedInput label="Suspected Cheats" />}
+            renderValue={(selected) => selected.join(', ')}
+          >
+            {cheats.map((cheat) => (
+              <MenuItem key={cheat} value={cheat}>
+                <Checkbox
+                  checked={suspectedCheats.indexOf(cheat) > -1}
+                  style={{ color: suspectedCheats.indexOf(cheat) > -1 ? '#00ff8c' : undefined }}
+                />
+                <ListItemText primary={cheat} />
+              </MenuItem>
+            ))}
+          </Select>
+        </StyledFormControl>
+        <StyledFormControl fullWidth variant="outlined">
+          <InputLabel htmlFor="video-link">Link to video proof</InputLabel>
+          <OutlinedInput
+            id="video-link"
+            label="Link to video proof"
+            placeholder="Enter video link"
+            value={videoLink}
+            onChange={handleVideoLinkChange}
+          />
+        </StyledFormControl>
+        <StyledButton type="submit" variant="contained" fullWidth>
+          Submit
+        </StyledButton>
+      </form>
+    </StyledContainer>
   );
 };
 

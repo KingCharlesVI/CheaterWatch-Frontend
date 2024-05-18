@@ -1,41 +1,85 @@
 /* Navbar.css */
-nav {
+
+/* Desktop Navbar */
+.desktop-navbar nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    font-family: 'Poppins', sans-serif; /* Use Poppins font */
+    font-family: 'Poppins', sans-serif;
     background-color: #000000;
 }
-  
-.brand {
+
+.desktop-navbar .brand {
     font-size: 1.5rem;
 }
 
-.brand a {
-    text-decoration: none; /* Remove underlining */
+.desktop-navbar .brand a {
+    text-decoration: none;
+    color: #00ff8c;
 }
-  
-.nav-links {
+
+.desktop-navbar .nav-links {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    display: flex;
 }
-  
-.nav-links li {
-    display: inline;
+
+.desktop-navbar .nav-links li {
     margin-left: 20px;
 }
-  
-.nav-links li:first-child {
+
+.desktop-navbar .nav-links li:first-child {
     margin-left: 0;
 }
-  
-.nav-links a {
-    color: #ffffff;
+
+.desktop-navbar .nav-links a {
+    color: white;
     text-decoration: none;
 }
-  
-.nav-links a:hover {
-    opacity: 0.6; /* Reduce opacity on hover */
+
+.desktop-navbar .nav-links a:hover {
+    opacity: 0.6;
+}
+
+/* Hide desktop navbar on mobile */
+@media (max-width: 768px) {
+    .desktop-navbar {
+        display: none;
+    }
+}
+
+/* Show desktop navbar on larger screens */
+@media (min-width: 769px) {
+    .mobile-navbar {
+        display: none;
+    }
+}
+
+/* Mobile Navbar (Drawer) */
+.mobile-navbar .MuiDrawer-paper {
+    width: 250px;
+    background-color: #000000;
+}
+
+.mobile-navbar .MuiListItem-root a {
+    text-decoration: none;
+    color: inherit;
+    background-color: #000000;
+}
+
+/* Mobile AppBar Styles */
+.mobile-navbar .MuiAppBar-root {
+    background-color: #000000; /* Black background for AppBar */
+}
+
+.mobile-navbar .MuiToolbar-root .MuiTypography-root a {
+    color: #00ff8c; /* Brand color */
+    text-decoration: none;
+}
+
+/* Additional specificity for brand color in mobile navbar */
+.mobile-navbar .MuiTypography-root a {
+    color: #00ff8c !important; /* Ensure the brand color is applied */
 }

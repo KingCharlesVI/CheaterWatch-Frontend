@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Container, FormControl, InputLabel, OutlinedInput, Button, Typography, Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import axios from 'axios'; // Import Axios for making HTTP requests
-import { Snackbar } from '@mui/material';
 import CallOfDutyMWLogo from '../assets/mw3.png';
 import WarzoneLogo from '../assets/wz.png';
 import ValorantLogo from '../assets/valorant.png';
@@ -89,6 +88,11 @@ const CheatReportForm = () => {
         proof_link: videoLink,
       });
       console.log('Report created successfully:', response.data);
+      // Clear form fields after successful submission
+      setGame('');
+      setUsername('');
+      setSuspectedCheats([]);
+      setVideoLink('');
     } catch (error) {
       console.error('Error creating report:', error);
     }
@@ -103,35 +107,12 @@ const CheatReportForm = () => {
     { value: 'Apex Legends', label: 'Apex Legends', logo: ApexLegendsLogo },
   ];
 
-  const [alertOpen, setAlertOpen] = useState(false);
-
-  const handleSubmitWithAlert = (e) => {
-    e.preventDefault();
-    // Handle form submission...
-    setAlertOpen(true); // Open the alert after successful submission
-  };
-
-  const handleCloseAlert = () => {
-    setAlertOpen(false); // Close the alert when dismissed by the user
-  
-  setGame('');
-  setUsername('');
-  setSuspectedCheats([]);
-  setVideoLink('');
-  };
-
   return (
     <StyledContainer maxWidth="sm">
-    <Snackbar
-      open={alertOpen}
-      autoHideDuration={6000} // Adjust as needed
-      onClose={handleCloseAlert}
-      message="Report submitted successfully!"
-    />
       <Typography variant="h4" gutterBottom>
         Cheat Report Form
       </Typography>
-      <form onSubmit={handleSubmitWithAlert}>
+      <form onSubmit={handleSubmit}>
         <StyledFormControl fullWidth variant="outlined">
           <InputLabel htmlFor="game">Game</InputLabel>
           <Select

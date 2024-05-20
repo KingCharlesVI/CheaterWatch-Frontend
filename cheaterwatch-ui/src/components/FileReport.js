@@ -61,7 +61,6 @@ const CheatReportForm = () => {
   const [username, setUsername] = useState('');
   const [suspectedCheats, setSuspectedCheats] = useState([]);
   const [videoLink, setVideoLink] = useState('');
-  const [isSuccess, setIsSuccess] = useState(false); // State variable to track success status
 
   const handleGameChange = (e) => {
     setGame(e.target.value);
@@ -89,7 +88,6 @@ const CheatReportForm = () => {
         proof_link: videoLink,
       });
       console.log('Report created successfully:', response.data);
-      setIsSuccess(true); // Set success status to true
       // Clear form fields after successful submission
       setGame('');
       setUsername('');
@@ -185,12 +183,6 @@ const CheatReportForm = () => {
         <StyledButton type="submit" variant="contained" fullWidth>
           Submit
         </StyledButton>
-            {/* Success message */}
-        {isSubmitted && (
-          <Typography variant="body1" style={{ color: 'green', marginTop: '10px' }}>
-            Report submitted successfully!
-          </Typography>
-        )}
       </form>
     </StyledContainer>
   );

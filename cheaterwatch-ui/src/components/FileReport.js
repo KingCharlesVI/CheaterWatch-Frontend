@@ -89,11 +89,6 @@ const CheatReportForm = () => {
         proof_link: videoLink,
       });
       console.log('Report created successfully:', response.data);
-      // Clear form fields after successful submission
-      setGame('');
-      setUsername('');
-      setSuspectedCheats([]);
-      setVideoLink('');
     } catch (error) {
       console.error('Error creating report:', error);
     }

@@ -118,6 +118,11 @@ const CheatReportForm = () => {
 
   const handleCloseAlert = () => {
     setAlertOpen(false); // Close the alert when dismissed by the user
+  
+  setGame('');
+  setUsername('');
+  setSuspectedCheats([]);
+  setVideoLink('');
   };
 
   return (

@@ -1,0 +1,30 @@
+form div {
+    margin-bottom: 20px;
+}
+  
+  form label {
+    display: block;
+    margin-bottom: 5px;
+}
+  
+form input, form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #00ff8c;
+    border-radius: 5px;
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+  
+form button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #00ff8c;
+    color: #000000;
+    cursor: pointer;
+}
+  
+form button:hover {
+    background-color: #00e07a;
+}

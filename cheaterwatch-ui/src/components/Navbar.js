@@ -40,6 +40,7 @@ const Navbar = () => {
           <ul className="nav-links">
             <li><Link to="/file-report">File a Report</Link></li>
             <li><Link to="/cheaters">Cheaters</Link></li>
+            <li><Link to="/blog">Blog</Link></li>
             <li><Link to="/auth">Signup/Login</Link></li>
           </ul>
         </nav>

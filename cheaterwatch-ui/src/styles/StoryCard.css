@@ -1,0 +1,27 @@
+/* StoryCard.css */
+.story-card {
+    background-color: #1a1a1a;
+    border: 1px solid #00ff8c;
+    border-radius: 10px;
+    padding: 20px;
+    width: 300px;
+    color: #ffffff;
+    text-align: left;
+}
+  
+.story-card h2 {
+    color: #00ff8c;
+}
+  
+.story-card p {
+    color: #cccccc;
+}
+  
+.story-card a {
+    color: #00ff8c;
+    text-decoration: none;
+}
+  
+.story-card a:hover {
+    text-decoration: underline;
+}

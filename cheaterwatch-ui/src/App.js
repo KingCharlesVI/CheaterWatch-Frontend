@@ -1,12 +1,15 @@
+// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Homepage from './components/Homepage'; // Import Homepage component
+import Homepage from './components/Homepage';
 import FileReport from './components/FileReport';
 import Cheaters from './components/Cheaters';
 import Auth from './components/Auth';
-import Footer from './components/Footer'; // Import Footer component
-import './App.css'; // Import global styles
+import BlogPage from './components/BlogPage';
+import AdminDashboard from './components/AdminDashboard';
+import Footer from './components/Footer';
+import './App.css';
 
 function App() {
   return (
@@ -15,13 +18,15 @@ function App() {
         <Navbar />
         <div className="routes-container">
           <Routes>
-            <Route path="/" element={<Homepage />} /> {/* Render Homepage component at root URL */}
+            <Route path="/" element={<Homepage />} />
             <Route path="/file-report" element={<FileReport />} />
             <Route path="/cheaters" element={<Cheaters />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/admin" element={<AdminDashboard />} />
           </Routes>
         </div>
-        <Footer /> {/* Include Footer component */}
+        <Footer />
       </div>
     </Router>
   );

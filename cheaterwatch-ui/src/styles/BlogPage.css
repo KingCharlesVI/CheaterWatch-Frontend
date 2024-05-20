@@ -1,0 +1,18 @@
+/* BlogPage.css */
+.blog-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+  
+.story-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+  
+.blog-container h1 {
+    color: #00ff8c;
+    text-align: center;
+}  

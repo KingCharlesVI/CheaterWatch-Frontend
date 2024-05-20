@@ -1,7 +1,7 @@
-// src/components/CheatReportForm.js
 import React, { useState } from 'react';
 import { Container, FormControl, InputLabel, OutlinedInput, Button, Typography, Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import axios from 'axios'; // Import Axios for making HTTP requests
 import CallOfDutyMWLogo from '../assets/mw3.png';
 import WarzoneLogo from '../assets/wz.png';
 import ValorantLogo from '../assets/valorant.png';
@@ -78,18 +78,24 @@ const CheatReportForm = () => {
     setVideoLink(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({
-      game,
-      username,
-      suspectedCheats,
-      videoLink,
-    });
-    setGame('');
-    setUsername('');
-    setSuspectedCheats([]);
-    setVideoLink('');
+    try {
+      const response = await axios.post('https://api.cheaterwatch.com/api/reports', {
+        game,
+        username,
+        suspected_cheats: suspectedCheats,
+        proof_link: videoLink,
+      });
+      console.log('Report created successfully:', response.data);
+      // Clear form fields after successful submission
+      setGame('');
+      setUsername('');
+      setSuspectedCheats([]);
+      setVideoLink('');
+    } catch (error) {
+      console.error('Error creating report:', error);
+    }
   };
 
   const cheats = ['Wallhacks', 'Aimbot', 'Speedhacks', 'Unlock'];

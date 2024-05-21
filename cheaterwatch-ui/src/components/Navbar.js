@@ -23,6 +23,9 @@ const Navbar = () => {
       <ListItem button component={Link} to="/cheaters" onClick={toggleDrawer(false)}>
         <ListItemText primary="Cheaters" />
       </ListItem>
+      <ListItem button component={Link} to="/blog" onClick={toggleDrawer(false)}>
+        <ListItemText primary="Blog" />
+      </ListItem>
       <ListItem button component={Link} to="/auth" onClick={toggleDrawer(false)}>
         <ListItemText primary="Signup/Login" />
       </ListItem>

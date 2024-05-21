@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, MenuItem, FormControl, InputLabel, Select } from '@mui/material';
+import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, MenuItem, FormControl, InputLabel, Select, Button, Modal } from '@mui/material';
 import axios from 'axios';
 import '../styles/Cheaters.css'; // Import the CSS file
 
@@ -11,6 +11,8 @@ const ApexCheaters = () => {
     cheat: '',
     ranking: '',
   });
+  const [selectedUser, setSelectedUser] = useState('');
+  const [userReports, setUserReports] = useState([]);
   const gameName = 'Apex Legends'; // Game name to filter cheaters for Apex Legends
 
   useEffect(() => {
@@ -62,27 +64,43 @@ const ApexCheaters = () => {
     setFilteredReports(sortedData);
   };
 
+  const handleUserClick = async (username) => {
+    setSelectedUser(username);
+    try {
+      const response = await axios.get(`https://api.cheaterwatch.com/api/reports/username/${encodeURIComponent(username)}`); // Change this line
+      const sortedUserReports = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      setUserReports(sortedUserReports);
+    } catch (error) {
+      console.error('Error fetching user reports:', error);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setSelectedUser('');
+    setUserReports([]);
+  };
+
   return (
     <Container maxWidth="lg">
-      <Typography variant="h2" style={{ color: '#00ff8c', marginTop: '20px', marginBottom: '20px' }}>{gameName} Cheaters</Typography> {/* Brand green color */}
+      <Typography variant="h2" style={{ color: '#00ff8c', marginTop: '20px', marginBottom: '20px' }}>{gameName} Cheaters</Typography>
       <div style={{ marginBottom: '20px' }}>
         <TextField
           label="Filter by Username"
           name="username"
           value={filter.username}
           onChange={handleFilterChange}
-          style={{ marginRight: '20px', color: '#fff', border: '1px solid #fff' }} // White color
-          InputProps={{ placeholder: 'Username', style: { color: '#fff' } }} // White color
-          InputLabelProps={{ style: { color: '#fff' } }} // White color
+          style={{ marginRight: '20px', color: '#fff', border: '1px solid #fff' }}
+          InputProps={{ placeholder: 'Username', style: { color: '#fff' } }}
+          InputLabelProps={{ style: { color: '#fff' } }}
         />
         <FormControl style={{ marginRight: '20px' }}>
-          <InputLabel style={{ color: '#fff' }}>Filter by Cheat</InputLabel> {/* White color */}
+          <InputLabel style={{ color: '#fff' }}>Filter by Cheat</InputLabel>
           <Select
             value={filter.cheat}
             onChange={handleFilterChange}
             name="cheat"
-            style={{ width: '150px', color: '#fff', border: '1px solid #fff' }} // White color
-            inputProps={{ style: { color: '#fff' } }} // White color
+            style={{ width: '150px', color: '#fff', border: '1px solid #fff' }}
+            inputProps={{ style: { color: '#fff' } }}
           >
             <MenuItem value="">All</MenuItem>
             <MenuItem value="Wallhacks">Wallhacks</MenuItem>
@@ -92,13 +110,13 @@ const ApexCheaters = () => {
           </Select>
         </FormControl>
         <FormControl>
-          <InputLabel style={{ color: '#fff' }}>Filter by Ranking</InputLabel> {/* White color */}
+          <InputLabel style={{ color: '#fff' }}>Filter by Ranking</InputLabel>
           <Select
             value={filter.ranking}
             onChange={handleFilterChange}
             name="ranking"
-            style={{ width: '150px', color: '#fff', border: '1px solid #fff' }} // White color
-            inputProps={{ style: { color: '#fff' } }} // White color
+            style={{ width: '150px', color: '#fff', border: '1px solid #fff' }}
+            inputProps={{ style: { color: '#fff' } }}
           >
             <MenuItem value="">All</MenuItem>
             <MenuItem value="Likely">Likely</MenuItem>
@@ -110,24 +128,62 @@ const ApexCheaters = () => {
         <Table>
           <TableHead style={{ backgroundColor: '#000' }}>
             <TableRow>
-              <TableCell style={{ color: '#00ff8c' }}>Username</TableCell> {/* Brand green color */}
-              <TableCell style={{ color: '#00ff8c' }}>Ranking</TableCell> {/* Brand green color */}
-              <TableCell style={{ color: '#00ff8c' }}>Cheats</TableCell> {/* Brand green color */}
-              <TableCell style={{ color: '#00ff8c' }} onClick={handleSortByTimestamp}>Timestamp</TableCell> {/* Brand green color */}
+              <TableCell style={{ color: '#00ff8c' }}>Username</TableCell>
+              <TableCell style={{ color: '#00ff8c' }}>Ranking</TableCell>
+              <TableCell style={{ color: '#00ff8c' }}>Cheats</TableCell>
+              <TableCell style={{ color: '#00ff8c' }} onClick={handleSortByTimestamp}>Timestamp</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {filteredReports.map((report) => (
               <TableRow key={report.id}>
-                <TableCell style={{ color: '#fff' }}>{report.username}</TableCell> {/* White color */}
-                <TableCell style={{ color: '#fff' }}>{report.suspected_cheats.length > 50 ? 'Certain' : 'Likely'}</TableCell> {/* White color */}
-                <TableCell style={{ color: '#fff' }}>{report.suspected_cheats.join(', ')}</TableCell> {/* White color */}
-                <TableCell style={{ color: '#fff' }}>{new Date(report.created_at).toLocaleString()}</TableCell> {/* White color */}
+                <TableCell style={{ color: '#fff' }}>
+                  <Button onClick={() => handleUserClick(report.username)} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    {report.username}
+                  </Button>
+                </TableCell>
+                <TableCell style={{ color: '#fff' }}>{report.suspected_cheats.length > 50 ? 'Certain' : 'Likely'}</TableCell>
+                <TableCell style={{ color: '#fff' }}>{report.suspected_cheats.join(', ')}</TableCell>
+                <TableCell style={{ color: '#fff' }}>{new Date(report.created_at).toLocaleString()}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <Modal open={!!selectedUser} onClose={handleCloseModal}>
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: '#333', padding: '20px', color: '#fff', width: '80%', maxWidth: '800px' }}>
+          <Typography variant="h4" style={{ color: '#00ff8c' }}>User Profile: {selectedUser}</Typography>
+          {userReports.length > 0 ? (
+            <div>
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow style={{ borderBottom: '2px solid #00ff8c' }}>
+                      <TableCell style={{ color: '#00ff8c' }}>Game</TableCell>
+                      <TableCell style={{ color: '#00ff8c' }}>Suspected Cheats</TableCell>
+                      <TableCell style={{ color: '#00ff8c' }}>Proof Link</TableCell>
+                      <TableCell style={{ color: '#00ff8c' }}>Timestamp</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {userReports.map((report) => (
+                      <TableRow key={report.id}>
+                        <TableCell style={{ color: '#fff' }}>{report.game}</TableCell>
+                        <TableCell style={{ color: '#fff' }}>{report.suspected_cheats.join(', ')}</TableCell>
+                        <TableCell style={{ color: '#fff' }}><a href={report.proof_link} target="_blank" rel="noopener noreferrer">{report.proof_link}</a></TableCell>
+                        <TableCell style={{ color: '#fff' }}>{new Date(report.created_at).toLocaleString()}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+          ) : (
+            <Typography variant="body1">No reports found for this user.</Typography>
+          )}
+          <Button onClick={handleCloseModal} style={{ position: 'absolute', top: '10px', right: '10px', color: '#fff', backgroundColor: 'transparent', border: 'none', fontSize: '24px' }}>X</Button>
+        </div>
+      </Modal>
     </Container>
   );
 };

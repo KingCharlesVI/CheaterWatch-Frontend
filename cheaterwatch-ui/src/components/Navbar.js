@@ -23,12 +23,6 @@ const Navbar = () => {
       <ListItem button component={Link} to="/cheaters" onClick={toggleDrawer(false)}>
         <ListItemText primary="Cheaters" />
       </ListItem>
-      <ListItem button component={Link} to="/blog" onClick={toggleDrawer(false)}>
-        <ListItemText primary="Blog" />
-      </ListItem>
-      <ListItem button component={Link} to="/auth" onClick={toggleDrawer(false)}>
-        <ListItemText primary="Signup/Login" />
-      </ListItem>
     </List>
   );
 
@@ -43,8 +37,6 @@ const Navbar = () => {
           <ul className="nav-links">
             <li><Link to="/file-report">File a Report</Link></li>
             <li><Link to="/cheaters">Cheaters</Link></li>
-            <li><Link to="/blog">Blog</Link></li>
-            <li><Link to="/auth">Signup/Login</Link></li>
           </ul>
         </nav>
       </div>

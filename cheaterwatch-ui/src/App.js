@@ -11,7 +11,6 @@ import ValorantCheaters from './components/ValorantCheaters';
 import ApexCheaters from './components/ApexCheaters';
 import Auth from './components/Auth';
 import BlogPage from './components/BlogPage';
-import AdminDashboard from './components/AdminDashboard';
 import Footer from './components/Footer';
 import './App.css';
 
@@ -31,7 +30,6 @@ function App() {
             <Route path="/apex" element={<ApexCheaters />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/blog" element={<BlogPage />} />
-            <Route path="/admin" element={<AdminDashboard />} />
           </Routes>
         </div>
         <Footer />

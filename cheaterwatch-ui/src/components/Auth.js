@@ -2,15 +2,12 @@
 import React, { useState } from 'react';
 import { Container, FormControl, InputLabel, OutlinedInput, Button, Typography, Grid, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
-
-// Import PNG icons
-import steamLogo from '../assets/steam.png';
-import eaLogo from '../assets/ea.png';
-import epicLogo from '../assets/epic.png';
+import { auth } from '../firebase';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
-  backgroundColor: '#000', // Black background
-  color: '#fff', // White text
+  backgroundColor: '#000',
+  color: '#fff',
   padding: theme.spacing(3),
   borderRadius: theme.shape.borderRadius,
 }));
@@ -18,24 +15,24 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 const StyledFormControl = styled(FormControl)(({ theme }) => ({
   marginBottom: theme.spacing(2),
   '& .MuiInputLabel-root': {
-    color: '#fff', // White label color
+    color: '#fff',
     marginRight: theme.spacing(2),
     '&.Mui-focused': {
-      color: '#00ff8c', // Green color when focused
+      color: '#00ff8c',
     },
   },
   '& .MuiOutlinedInput-root': {
     '& input': {
-      color: '#fff', // White text color
+      color: '#fff',
     },
     '& fieldset': {
-      borderColor: '#fff', // White border color
+      borderColor: '#fff',
     },
     '&:hover fieldset': {
-      borderColor: '#fff', // White border color on hover
+      borderColor: '#fff',
     },
     '&.Mui-focused fieldset': {
-      borderColor: '#00ff8c', // Green border color when focused
+      borderColor: '#00ff8c',
     },
   },
 }));
@@ -63,19 +60,34 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [error, setError] = useState('');
 
   const handleSwitch = () => {
     setIsLogin(!isLogin);
   };
 
-  const handleSignup = (event) => {
+  const handleSignup = async (event) => {
     event.preventDefault();
-    // Handle signup logic
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      if (auth.currentUser) {
+        await auth.currentUser.updateProfile({ displayName: username });
+      }
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
-    // Handle login logic
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
@@ -83,121 +95,57 @@ const Auth = () => {
       <Typography variant="h4" gutterBottom>
         {isLogin ? 'Login' : 'Signup'}
       </Typography>
+      {error && <Typography color="error">{error}</Typography>}
       <form onSubmit={isLogin ? handleLogin : handleSignup}>
         {!isLogin && (
-          <>
-            <StyledFormControl fullWidth variant="outlined">
-              <InputLabel htmlFor="username">Username</InputLabel>
-              <OutlinedInput
-                id="username"
-                label="Username"
-                placeholder="Enter your username"
-                required
-              />
-            </StyledFormControl>
-            <StyledFormControl fullWidth variant="outlined">
-              <InputLabel htmlFor="email">Email</InputLabel>
-              <OutlinedInput
-                id="email"
-                label="Email"
-                placeholder="Enter your email"
-                type="email"
-                required
-              />
-            </StyledFormControl>
-          </>
-        )}
-        {isLogin && (
           <StyledFormControl fullWidth variant="outlined">
-            <InputLabel htmlFor="username-or-email">Username or Email</InputLabel>
+            <InputLabel htmlFor="username">Username</InputLabel>
             <OutlinedInput
-              id="username-or-email"
-              label="Username or Email"
-              placeholder="Enter your username or email"
+              id="username"
+              label="Username"
+              placeholder="Enter your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
           </StyledFormControl>
         )}
+        <StyledFormControl fullWidth variant="outlined">
+          <InputLabel htmlFor="email">Email</InputLabel>
+          <OutlinedInput
+            id="email"
+            label="Email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+            required
+          />
+        </StyledFormControl>
         <StyledFormControl fullWidth variant="outlined">
           <InputLabel htmlFor="password">Password</InputLabel>
           <OutlinedInput
             id="password"
             label="Password"
             placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             type="password"
             required
           />
         </StyledFormControl>
-        {isLogin ? (
-          <>
-            <Grid container spacing={2} justifyContent="center">
-              <Grid item>
-                <StyledButton type="submit" variant="contained">
-                  Login
-                </StyledButton>
-              </Grid>
-              <Grid item>
-                <StyledOutlinedButton variant="outlined" onClick={handleSwitch}>
-                  Create an account
-                </StyledOutlinedButton>
-              </Grid>
-            </Grid>
-            <Typography variant="h6" gutterBottom align="center" style={{ marginTop: '1em' }}>
-              Or login with your game launcher account
-            </Typography>
-            <Grid container spacing={2} justifyContent="center">
-              <Grid item>
-                <StyledIconButton>
-                  <img src={steamLogo} alt="Steam" width="32" height="32" />
-                </StyledIconButton>
-              </Grid>
-              <Grid item>
-                <StyledIconButton>
-                  <img src={eaLogo} alt="EA" width="32" height="32" />
-                </StyledIconButton>
-              </Grid>
-              <Grid item>
-                <StyledIconButton>
-                  <img src={epicLogo} alt="Epic Games" width="32" height="32" />
-                </StyledIconButton>
-              </Grid>
-            </Grid>
-          </>
-        ) : (
-          <>
-            <StyledButton type="submit" variant="contained" fullWidth>
-              Signup
+        <Grid container spacing={2} justifyContent="center">
+          <Grid item>
+            <StyledButton type="submit" variant="contained">
+              {isLogin ? 'Login' : 'Signup'}
             </StyledButton>
-            <Typography variant="h6" gutterBottom style={{ marginTop: '1em' }}>
-              Link Game Launcher Accounts
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item>
-                <StyledIconButton>
-                  <img src={steamLogo} alt="Steam" width="32" height="32" />
-                </StyledIconButton>
-              </Grid>
-              <Grid item>
-                <StyledIconButton>
-                  <img src={eaLogo} alt="EA" width="32" height="32" />
-                </StyledIconButton>
-              </Grid>
-              <Grid item>
-                <StyledIconButton>
-                  <img src={epicLogo} alt="Epic Games" width="32" height="32" />
-                </StyledIconButton>
-              </Grid>
-            </Grid>
-            <StyledOutlinedButton
-              variant="outlined"
-              fullWidth
-              onClick={handleSwitch}
-              style={{ marginTop: '1em' }}
-            >
-              Login instead
+          </Grid>
+          <Grid item>
+            <StyledOutlinedButton variant="outlined" onClick={handleSwitch}>
+              {isLogin ? 'Create an account' : 'Login instead'}
             </StyledOutlinedButton>
-          </>
-        )}
+          </Grid>
+        </Grid>
       </form>
     </StyledContainer>
   );

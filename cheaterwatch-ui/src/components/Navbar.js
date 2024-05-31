@@ -37,6 +37,7 @@ const Navbar = () => {
           <ul className="nav-links">
             <li><Link to="/file-report">File a Report</Link></li>
             <li><Link to="/cheaters">Cheaters</Link></li>
+            <li><Link to="/auth">Login/Signup</Link></li>
           </ul>
         </nav>
       </div>

@@ -83,3 +83,16 @@
 .mobile-navbar .MuiTypography-root a {
     color: #00ff8c !important; /* Ensure the brand color is applied */
 }
+
+/* src/styles/Navbar.css */
+.logout-icon {
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+  

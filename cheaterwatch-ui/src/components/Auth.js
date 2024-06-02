@@ -2,8 +2,9 @@
 import React, { useState } from 'react';
 import { Container, FormControl, InputLabel, OutlinedInput, Button, Typography, Grid, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { auth } from '../firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useAuth } from '../context/AuthContext';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   backgroundColor: '#000',
@@ -54,15 +55,12 @@ const StyledOutlinedButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const StyledIconButton = styled(IconButton)(({ theme }) => ({
-  color: '#fff',
-}));
-
 const Auth = () => {
+  const { login, signup } = useAuth();
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleSwitch = () => {
@@ -72,21 +70,28 @@ const Auth = () => {
   const handleSignup = async (event) => {
     event.preventDefault();
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      if (auth.currentUser) {
-        await auth.currentUser.updateProfile({ displayName: username });
-      }
+      await signup(username, password);
+      toast.success('Signup successful. Redirecting to homepage...');
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
     } catch (error) {
       setError(error.message);
+      toast.error(error.message);
     }
   };
 
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await login(username, password);
+      toast.success('Login successful. Redirecting to homepage...');
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
     } catch (error) {
       setError(error.message);
+      toast.error(error.message);
     }
   };
 
@@ -97,28 +102,14 @@ const Auth = () => {
       </Typography>
       {error && <Typography color="error">{error}</Typography>}
       <form onSubmit={isLogin ? handleLogin : handleSignup}>
-        {!isLogin && (
-          <StyledFormControl fullWidth variant="outlined">
-            <InputLabel htmlFor="username">Username</InputLabel>
-            <OutlinedInput
-              id="username"
-              label="Username"
-              placeholder="Enter your username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </StyledFormControl>
-        )}
         <StyledFormControl fullWidth variant="outlined">
-          <InputLabel htmlFor="email">Email</InputLabel>
+          <InputLabel htmlFor="username">Username</InputLabel>
           <OutlinedInput
-            id="email"
-            label="Email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
+            id="username"
+            label="Username"
+            placeholder="Enter your username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
         </StyledFormControl>

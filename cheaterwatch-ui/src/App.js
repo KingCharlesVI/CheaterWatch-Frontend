@@ -11,34 +11,43 @@ import ValorantCheaters from './components/ValorantCheaters';
 import ApexCheaters from './components/ApexCheaters';
 import Auth from './components/Auth';
 import BlogPage from './components/BlogPage';
+import UserDashboard from './components/UserDashboard';
 import Footer from './components/Footer';
 import PrivateRoute from './components/PrivateRoute';
+import { AuthProvider } from './context/AuthContext';
 import './App.css';
 
 function App() {
   return (
     <Router>
-      <div className="app-container">
-        <Navbar />
-        <div className="routes-container">
-          <Routes>
-            <Route path="/" element={<Homepage />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/file-report" element={
-              <PrivateRoute>
-                <FileReport />
-              </PrivateRoute>
-            } />
-            <Route path="/cheaters" element={<Cheaters />} />
-            <Route path="/mw3" element={<MW3Cheaters />} />
-            <Route path="/warzone" element={<WarzoneCheaters />} />
-            <Route path="/valorant" element={<ValorantCheaters />} />
-            <Route path="/apex" element={<ApexCheaters />} />
-            <Route path="/blog" element={<BlogPage />} />
-          </Routes>
+      <AuthProvider>
+        <div className="app-container">
+          <Navbar />
+          <div className="routes-container">
+            <Routes>
+              <Route path="/" element={<Homepage />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/file-report" element={
+                <PrivateRoute>
+                  <FileReport />
+                </PrivateRoute>
+              } />
+              <Route path="/cheaters" element={<Cheaters />} />
+              <Route path="/mw3" element={<MW3Cheaters />} />
+              <Route path="/warzone" element={<WarzoneCheaters />} />
+              <Route path="/valorant" element={<ValorantCheaters />} />
+              <Route path="/apex" element={<ApexCheaters />} />
+              <Route path="/blog" element={<BlogPage />} />
+              <Route path="/dashboard" element={
+                <PrivateRoute>
+                  <UserDashboard />
+                </PrivateRoute>
+              } />
+            </Routes>
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
+      </AuthProvider>
     </Router>
   );
 }

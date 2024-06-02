@@ -1,17 +1,16 @@
 // src/components/PrivateRoute.js
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../firebase';
+import { useAuth } from '../context/AuthContext';
 
 const PrivateRoute = ({ children }) => {
-  const [user, loading] = useAuthState(auth);
+  const { user } = useAuth();
 
-  if (loading) {
-    return <div>Loading...</div>; // Customize this loading indicator as needed
+  if (!user) {
+    return <Navigate to="/auth" />;
   }
 
-  return user ? children : <Navigate to="/auth" />;
+  return children;
 };
 
 export default PrivateRoute;

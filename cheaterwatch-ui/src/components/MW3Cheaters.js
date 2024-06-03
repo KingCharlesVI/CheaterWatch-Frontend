@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Modal, Button } from '@mui/material';
+import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, MenuItem, FormControl, InputLabel, Select, Modal, Button } from '@mui/material';
 import axios from 'axios';
 import '../styles/Cheaters.css'; // Import the CSS file
 
@@ -74,11 +74,54 @@ const MW3Cheaters = () => {
     setUserReports([]);
   };
 
+  const handleFilterChange = (event) => {
+    const { name, value } = event.target;
+    setFilter({ ...filter, [name]: value });
+  };
+
   return (
     <Container maxWidth="lg">
       <Typography variant="h2" style={{ color: '#00ff8c', marginTop: '20px', marginBottom: '20px' }}>{gameName} Cheaters</Typography>
       <div style={{ marginBottom: '20px' }}>
-        {/* Filter controls */}
+        <TextField
+          label="Filter by Username"
+          name="username"
+          value={filter.username}
+          onChange={handleFilterChange}
+          style={{ marginRight: '20px', color: '#fff', border: '1px solid #fff' }}
+          InputProps={{ placeholder: 'Username', style: { color: '#fff' } }}
+          InputLabelProps={{ style: { color: '#fff' } }}
+        />
+        <FormControl style={{ marginRight: '20px' }}>
+          <InputLabel style={{ color: '#fff' }}>Filter by Cheat</InputLabel>
+          <Select
+            value={filter.cheat}
+            onChange={handleFilterChange}
+            name="cheat"
+            style={{ width: '150px', color: '#fff', border: '1px solid #fff' }}
+            inputProps={{ style: { color: '#fff' } }}
+          >
+            <MenuItem value="">All</MenuItem>
+            <MenuItem value="Wallhacks">Wallhacks</MenuItem>
+            <MenuItem value="Aimbot">Aimbot</MenuItem>
+            <MenuItem value="Speedhacks">Speedhacks</MenuItem>
+            <MenuItem value="Unlock">Unlock</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl>
+          <InputLabel style={{ color: '#fff' }}>Filter by Ranking</InputLabel>
+          <Select
+            value={filter.ranking}
+            onChange={handleFilterChange}
+            name="ranking"
+            style={{ width: '150px', color: '#fff', border: '1px solid #fff' }}
+            inputProps={{ style: { color: '#fff' } }}
+          >
+            <MenuItem value="">All</MenuItem>
+            <MenuItem value="Likely">Likely</MenuItem>
+            <MenuItem value="Certain">Certain</MenuItem>
+          </Select>
+        </FormControl>
       </div>
       <TableContainer>
         <Table>
